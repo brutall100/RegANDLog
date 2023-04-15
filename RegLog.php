@@ -25,7 +25,6 @@
     <div class="sign-up-container">
       <form method="POST" action="http://localhost:4000/register" id="register-form">
         <h1>Registracija</h1>
-
     </div>
 
     <div class="form-group">
