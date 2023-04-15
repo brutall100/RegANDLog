@@ -1,87 +1,77 @@
 const express = require('express');
-const axios = require('axios');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
-const bcrypt = require('bcrypt');
+const mysql = require('mysql2');
+const bodyParser = require('body-parser'); // Add this line
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// Parse JSON and urlencoded request bodies
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// create a connection to your MySQL database
-const connection = mysql.createConnection({
+// Create a MySQL connection pool
+const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'viktorina'
+  database: 'reg_and_log',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to database Viktorina');
-});
-
-app.post('/login', (req, res) => {
-  const { nick_name, user_password } = req.body;
-  const sql = `SELECT * FROM super_users WHERE nick_name = ?`;
-  connection.query(sql, [nick_name], (err, result) => {
-    if (err) throw err;
-    if (result.length > 0) {
-      const { user_password: hashedPassword, user_email, user_lvl } = result[0]; // get user_lvl from result
-      bcrypt.compare(user_password, hashedPassword, (err, match) => {
-        if (err) throw err;
-        if (match) {
-          res.redirect(`http://localhost/aldas/Viktorina.live/a_index.php?name=${nick_name}&email=${user_email}&level=${user_lvl}`);
-        } else {
-          res.send('Invalid username or password');
-        }
-      });
-    } else {
-      res.send('Invalid username or password');
-    }
-  });
-});
-
-
+// Define a route for handling registration form submissions
 app.post('/register', (req, res) => {
-  const { nick_name, user_email, user_password, gender, other_gender } = req.body;
+  // Extract the submitted form data
+  const {nameInput, emailInput, passwordInput} = req.body;
 
-  bcrypt.hash(user_password, 10, (err, hashedPassword) => {
-    if (err) throw err;
-
-    const currentDate = new Date().toISOString().slice(0, 20); // Get the current date in YYYY-MM-DD format
-
-    let genderValue = '';
-    if (gender === 'Other') {
-      genderValue = other_gender;
-    } else {
-      genderValue = gender;
-    }
-
-    const sql = `INSERT INTO super_users (nick_name, user_email, user_password, registration_date, user_lvl, gender_super) VALUES (?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), 0, ?)`;
-
-    connection.query(sql, [nick_name, user_email, hashedPassword, genderValue], (err, result) => {
-      if (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-          // handle duplicate entry error
-          res.send('User already exists');
-        } else {
-          // handle other errors
-          throw err;
-        }
+  // Insert the form data into the "users" table
+  const sql = "INSERT INTO users (name_node, email_node, password_node) VALUES (?, ?, ?)";
+  pool.query(
+    sql, 
+    [nameInput, emailInput, passwordInput],
+    (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        res.status(500).send('Internal server error');
       } else {
-        // handle successful registration
-        const user_lvl = 0; // set the user_lvl variable to 0
-        res.redirect(`http://localhost/aldas/Viktorina.live/a_index.php?name=${nick_name}&email=${user_email}&level=${user_lvl}`);
-      }      
-    });
-  });
+        console.log('User registered:', nameInput, emailInput);
+        res.status(200).send('Registration successful');
+      }
+    }
+  );
+});
+
+// Define a route for handling login form submissions
+app.post('/login', (req, res) => {
+  // Extract the submitted form data
+  const { login_name, login_password } = req.body;
+
+  // Check if the user with the given name and password exists
+  pool.query(
+    'SELECT * FROM users WHERE name_node = ? AND password_node = ?',
+    [login_name, login_password],
+    (error, results, fields) => {
+      if (error) {
+        console.error(error);
+        res.status(500).send('Internal server error');
+      } else if (results.length === 0) {
+        console.log('Login failed:', login_name, login_password);
+        res.status(401).send('Invalid username or password');
+      } else {
+        console.log('User logged in:', login_name);
+        res.status(200).send('Login successful');
+      }
+    }
+  );
+});
+
+// Start the server on port 9999
+app.listen(9999, () => {
+  console.log('Server started on port 9999');
 });
 
 
 
-app.listen(4000, () => {
-  console.log('Server listening on port 4000');
-});
+// DATABASE database: 'reg_and_log   users (name_node, email_node, password_node)
 
+//  C:\xampp\htdocs\aldas\RegiLogiNode\RegANDLog> node RegLogServer.js
