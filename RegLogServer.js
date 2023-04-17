@@ -71,7 +71,11 @@ app.listen(9999, () => {
 });
 
 
-
+// Reikia taip pat instaliouti    npm install express
+//                                npm install mysql
+//      arba                      npm install express mysql2
+                          
+                                  
 // DATABASE database: 'reg_and_log   users (name_node, email_node, password_node)
 
 //  C:\xampp\htdocs\aldas\RegiLogiNode\RegANDLog> node RegLogServer.js
