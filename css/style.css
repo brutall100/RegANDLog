@@ -10,63 +10,77 @@
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Colors: "Cobalt" blue palette. Dark mode below. */
+/* Colors: "Sage & Beige" palette.
+   Sage #8FA28A, light sage #C7D3C0, cream #F7F4ED, beige #C8A96B.
+   The "-text" versions are darker, so small text stays easy to read. */
 :root {
-  --accent: #2563eb;
-  --accent-deep: #1a44a8;
-  --accent-rgb: 37, 99, 235;
-  --on-accent: #ffffff;
-  --bg: #f3f6fc;
+  --accent: #8fa28a;
+  --accent-deep: #5f7359;
+  --accent-rgb: 143, 162, 138;
+  --accent-text: #56704f;
+  --on-accent: #18201a;
+  --accent-2: #c8a96b;
+  --accent-2-text: #8a6a2c;
+  --accent-soft: #c7d3c0;
+  --bg: #f7f4ed;
   --surface: #ffffff;
-  --text: #0e1628;
-  --muted: #56607a;
-  --line: #dbe2ef;
-  --dot: rgba(14, 22, 40, 0.14);
-  --glow: rgba(37, 99, 235, .35);
-  --ok: #0369a1;
-  --err: #c0392b;
-  --code-bg: #0e1628;
-  --code-accent: #5b8cff;
+  --text: #1c2320;
+  --muted: #5c6659;
+  --line: #dde2d5;
+  --dot: rgba(28, 35, 32, 0.14);
+  --glow: rgba(200, 169, 107, 0.4);
+  --ok: #4e6349;
+  --err: #b23a2e;
+  --code-bg: #1f2a22;
+  --code-accent: #c8a96b;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --accent: #5b8cff;
-    --accent-deep: #2f5bd3;
-    --accent-rgb: 91, 140, 255;
-    --on-accent: #07101f;
-    --bg: #0a0f1c;
-    --surface: #121a2c;
-    --text: #e8eefc;
-    --muted: #95a1bd;
-    --line: #22304a;
-    --dot: rgba(232, 238, 252, 0.1);
-    --glow: rgba(91, 140, 255, .3);
-    --ok: #56c2ff;
-    --err: #ff7b6b;
-    --code-bg: #060a14;
-    --code-accent: #5b8cff;
+    --accent: #a9bba4;
+    --accent-deep: #6f8469;
+    --accent-rgb: 169, 187, 164;
+    --accent-text: #a9bba4;
+    --on-accent: #141914;
+    --accent-2: #d6b97c;
+    --accent-2-text: #d6b97c;
+    --accent-soft: #3a4838;
+    --bg: #141914;
+    --surface: #1c231d;
+    --text: #f7f4ed;
+    --muted: #a3ad9d;
+    --line: #2e382e;
+    --dot: rgba(247, 244, 237, 0.09);
+    --glow: rgba(143, 162, 138, 0.3);
+    --ok: #c7d3c0;
+    --err: #ff8a7a;
+    --code-bg: #0e120e;
+    --code-accent: #d6b97c;
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --accent: #5b8cff;
-  --accent-deep: #2f5bd3;
-  --accent-rgb: 91, 140, 255;
-  --on-accent: #07101f;
-  --bg: #0a0f1c;
-  --surface: #121a2c;
-  --text: #e8eefc;
-  --muted: #95a1bd;
-  --line: #22304a;
-  --dot: rgba(232, 238, 252, 0.1);
-  --glow: rgba(91, 140, 255, .3);
-  --ok: #56c2ff;
-  --err: #ff7b6b;
-  --code-bg: #060a14;
-  --code-accent: #5b8cff;
+  --accent: #a9bba4;
+  --accent-deep: #6f8469;
+  --accent-rgb: 169, 187, 164;
+  --accent-text: #a9bba4;
+  --on-accent: #141914;
+  --accent-2: #d6b97c;
+  --accent-2-text: #d6b97c;
+  --accent-soft: #3a4838;
+  --bg: #141914;
+  --surface: #1c231d;
+  --text: #f7f4ed;
+  --muted: #a3ad9d;
+  --line: #2e382e;
+  --dot: rgba(247, 244, 237, 0.09);
+  --glow: rgba(143, 162, 138, 0.3);
+  --ok: #c7d3c0;
+  --err: #ff8a7a;
+  --code-bg: #0e120e;
+  --code-accent: #d6b97c;
   color-scheme: dark;
 }
 
@@ -131,7 +145,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--accent-text);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -258,7 +272,7 @@ main:focus {
 }
 
 .mode-badge[data-mode="demo"] .mode-badge__dot {
-  background: var(--accent);
+  background: var(--accent-2);
 }
 
 .theme-toggle {
@@ -334,7 +348,7 @@ main {
 }
 
 .accent {
-  color: var(--accent);
+  color: var(--accent-2-text);
 }
 
 .hero__lead {
@@ -406,7 +420,7 @@ main {
 .card__step {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 
@@ -611,7 +625,7 @@ input[aria-invalid="true"] {
   gap: 14px;
   margin-top: 20px;
   padding: 16px;
-  border: 1.5px dashed var(--accent);
+  border: 1.5px dashed var(--accent-2);
   border-radius: var(--radius);
   animation: pop 0.4s var(--ease);
 }
@@ -680,7 +694,7 @@ input[aria-invalid="true"] {
 .step__num {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 

@@ -32,6 +32,7 @@ GitHub Pages can only host static files, so there is no Node server there. The l
 - [Node.js](https://nodejs.org/) 18+ and [Express](https://expressjs.com/)
 - [MySQL](https://www.mysql.com/) (or MariaDB) through [mysql2](https://github.com/sidorares/node-mysql2)
 - Fonts: Barlow Condensed, Barlow and JetBrains Mono (Google Fonts)
+- Colors: a calm sage & beige palette: `#8FA28A` sage, `#C7D3C0` light sage, `#F7F4ED` cream, `#C8A96B` beige
 
 ## What I learned
 

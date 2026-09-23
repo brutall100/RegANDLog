@@ -99,7 +99,7 @@ const strengthText = document.getElementById("reg-strength-text");
 const strengthLevels = [
   { label: "Use 8+ characters. Mix letters, numbers and symbols.", color: "var(--line)" },
   { label: "Weak password", color: "var(--err)" },
-  { label: "Okay password", color: "var(--accent)" },
+  { label: "Okay password", color: "var(--accent-2)" },
   { label: "Good password", color: "var(--accent)" },
   { label: "Strong password", color: "var(--ok)" },
 ];
