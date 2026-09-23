@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Node Register &amp; Login</title>
+  <meta name="description" content="A register and login page with a Node.js + Express + MySQL backend, hashed passwords and a browser-only demo mode." />
+  <meta name="theme-color" content="#f2b705" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Set the theme before the first paint, so the page never flashes.
+    document.documentElement.classList.add("js");
+    try {
+      const saved = localStorage.getItem("theme");
+      if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    } catch {}
+  </script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="bg" aria-hidden="true">
+    <div class="bg__dots"></div>
+    <div class="bg__glow"></div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#main" aria-label="Node Register &amp; Login, home">
+      <img src="images/favicon.svg" width="32" height="32" alt="" />
+      <span>node-register-login</span>
+    </a>
+    <div class="topbar__right">
+      <span class="mode-badge" id="mode-badge" data-mode="checking">
+        <span class="mode-badge__dot"></span>
+        <span id="mode-text">Checking server…</span>
+      </span>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero reveal">
+      <p class="eyebrow">Node.js · Express · MySQL</p>
+      <h1>Register <span class="accent">&amp;</span> log in</h1>
+      <p class="hero__lead">
+        One page, two forms and a small Express API. Passwords are salted and hashed
+        before they touch the database. On GitHub Pages it runs in demo mode and keeps
+        everything in your browser.
+      </p>
+      <ul class="stats">
+        <li><span class="stats__num" data-count="2">0</span><span class="stats__label">forms</span></li>
+        <li><span class="stats__num" data-count="3">0</span><span class="stats__label">API routes</span></li>
+        <li><span class="stats__num" data-count="16">0</span><span class="stats__label">byte salt</span></li>
+        <li><span class="stats__num" data-count="0" data-start="100">100</span><span class="stats__label">plain-text passwords</span></li>
+      </ul>
+    </section>
+
+    <section class="forms" aria-label="Account forms">
+      <article class="card reveal" aria-labelledby="register-title">
+        <header class="card__head">
+          <span class="card__step">01</span>
+          <h2 id="register-title">Create an account</h2>
+        </header>
+        <form id="register-form" class="form" novalidate>
+          <div class="field">
+            <label for="reg-name">Name</label>
+            <input id="reg-name" name="name" type="text" autocomplete="username" placeholder="Alex Doe" minlength="2" maxlength="50" required />
+          </div>
+          <div class="field">
+            <label for="reg-email">Email</label>
+            <input id="reg-email" name="email" type="email" autocomplete="email" placeholder="alex@example.com" maxlength="100" required />
+          </div>
+          <div class="field">
+            <label for="reg-password">Password</label>
+            <div class="field__pw">
+              <input id="reg-password" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" maxlength="100" required aria-describedby="reg-strength-text" />
+              <button class="pw-toggle" type="button" aria-controls="reg-password" aria-pressed="false">Show</button>
+            </div>
+            <div class="strength" aria-hidden="true"><span class="strength__bar" id="reg-strength-bar"></span></div>
+            <p class="field__hint" id="reg-strength-text">Use 8+ characters. Mix letters, numbers and symbols.</p>
+          </div>
+          <button class="btn btn--primary" type="submit">
+            <span>Register</span><span class="btn__icon" aria-hidden="true">↗</span>
+          </button>
+          <p class="form__msg" role="status" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="card reveal" aria-labelledby="login-title">
+        <header class="card__head">
+          <span class="card__step">02</span>
+          <h2 id="login-title">Log in</h2>
+        </header>
+        <form id="login-form" class="form" novalidate>
+          <div class="field">
+            <label for="login-name">Name</label>
+            <input id="login-name" name="name" type="text" autocomplete="username" placeholder="Alex Doe" maxlength="50" required />
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <div class="field__pw">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Your password" maxlength="100" required />
+              <button class="pw-toggle" type="button" aria-controls="login-password" aria-pressed="false">Show</button>
+            </div>
+          </div>
+          <button class="btn btn--primary" type="submit">
+            <span>Log in</span><span class="btn__icon" aria-hidden="true">↗</span>
+          </button>
+          <p class="form__msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="welcome" id="welcome" hidden>
+          <img class="welcome__avatar" id="welcome-avatar" width="56" height="56" alt="" />
+          <div>
+            <p class="welcome__hi">Welcome back,</p>
+            <p class="welcome__name" id="welcome-name"></p>
+          </div>
+          <button class="btn btn--ghost" id="logout" type="button">
+            <span>Log out</span><span class="btn__icon" aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section class="how reveal" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num">01</span>
+          <h3>Form → JSON</h3>
+          <p>The browser checks the fields, then sends them to the API with <code>fetch</code>.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">02</span>
+          <h3>Salt + scrypt</h3>
+          <p>Express hashes the password with Node's built-in <code>crypto.scrypt</code> and a random salt.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">03</span>
+          <h3>MySQL</h3>
+          <p>Only the hash goes into the <code>users</code> table. Queries use placeholders, so no SQL injection.</p>
+        </li>
+      </ol>
+      <pre class="code" aria-label="Example request"><code><span class="c">// POST /api/register</span>
+{ "name": "Alex Doe", "email": "alex@example.com", "password": "••••••••" }
+<span class="c">// → 201 Created</span>  { "name": "Alex Doe" }</code></pre>
+      <div class="how__links">
+        <a class="btn btn--primary" href="https://github.com/brutall100/node-register-login">
+          <span>View the code</span><span class="btn__icon" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><span class="mono">node-register-login</span> · a portfolio project · CC0 license</p>
+  </footer>
+</body>
+</html>
