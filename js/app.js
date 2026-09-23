@@ -267,7 +267,10 @@ function initialsAvatar(name) {
     .map((part) => part[0].toUpperCase())
     .join("");
   const safe = initials.replace(/[<>&"']/g, "");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="#f2b705"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="24" fill="#14181b">${safe}</text></svg>`;
+  const styles = getComputedStyle(root);
+  const bg = styles.getPropertyValue("--accent").trim();
+  const fg = styles.getPropertyValue("--on-accent").trim();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><circle cx="28" cy="28" r="28" fill="${bg}"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="24" fill="${fg}">${safe}</text></svg>`;
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
